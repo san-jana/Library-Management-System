@@ -1,0 +1,18 @@
+The Library API enables seamless management for your library, such as retrieving student details, search for a book or issuing and returning books.
+
+Prerequisites:
+An API testing application to make requests. Eg.: Postman.
+
+*References:*
+1. Get Student (Basic Auth)
+Retrieve a student's information from the database using their student ID.
+
+List of students currently in the database:
+
+Request -GET 
+Endpoint: 
+Parameters: 
+Example:
+
+Response
+
