@@ -200,7 +200,7 @@ def delete_book(book_id):
     cur.execute("DELETE FROM Books WHERE BookID = ?", book_id)
     cur.commit()
     
-    return f" You have deleted the book '{book.BookName}' from The Library."
+    return f" You have deleted the book '{book.BookName}' from the Library."
     
         
 
