@@ -27,7 +27,7 @@ def auth_required(f):
         auth = request.authorization
         if auth and auth.username == lib_username and auth.password == lib_password:
             return f(*args, **kwargs)
-        return make_response("Must verify to access The Library!",401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        return make_response("You must verify to access The Library!",401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
     return decorated
 
 
@@ -78,20 +78,25 @@ def get_student(student_id):
                     "Cumulative Number Books Issued": student.TotalBooksIssued,
                     "Is the Student Banned": student.StudentBanned }  
     cur.commit()    
-    return json.dumps(student_data), 200
+    return json.dumps(student_data)
     
 
 # Add a new book to the database    
 @app.route('/add-book', methods = ['POST'])
 @auth_required
 def add_book():
-    book_data = request.get_json()
-    book_data = list(book_data.values())
-    cur.execute("INSERT INTO Books(BookID, BookName, Authors, AuthorAlias, BookEdition) \
-            VALUES (?,?,?,?,?)", book_data)
-    cur.commit()
+    try:
+        book_data = request.get_json()
+        book_data = list(book_data.values())
+        cur.execute("INSERT INTO Books(BookID, BookName, Authors, AuthorAlias, BookEdition) \
+                VALUES (?,?,?,?,?)", book_data)
+        book = cur.execute("SELECT * FROM Books WHERE BookID = ?", book_data[0]).fetchone()
+        cur.commit()
+        
+        return f"New book has successfully been added to The Library!\nView details:\n{book}"
     
-    return "New book successfully added!"
+    except pyodbc.IntegrityError as e:
+        return ("You cannot enter duplicate book IDs!!\n The book ID must be unique, check the book ID you have entered.")
 
 
 # Issue or re-issue a book
@@ -164,7 +169,7 @@ def return_book():
         
         # Check if book has already been returned
         if issued_book.ReturnStatus == 'Returned':
-            return("Student has returned the book.")
+            return("The student has returned the book.")
             
         elif issued_book.ReturnStatus == 'Issued':
             # Return book
@@ -177,6 +182,26 @@ def return_book():
             cur.commit()
             
             return("Book returned!")
+
+
+# Delete a book
+@app.route('/delete-book/<book_id>', methods = ['DELETE'])  
+@auth_required
+def delete_book(book_id):
+    book = cur.execute("SELECT * FROM Books WHERE BookID = ?", book_id).fetchone()
+    
+    if not book:
+        return("The Library does not contain any book with this ID!\n Check if you have entered an incorrect ID.")
+
+    if book.BookStatus == 'Issued':
+        cur.commit()
+        return ("This book is currently issued!")
+    
+    cur.execute("DELETE FROM Books WHERE BookID = ?", book_id)
+    cur.commit()
+    
+    return f" You have deleted the book '{book.BookName}' from The Library."
+    
         
 
 if __name__ == '__main__':
