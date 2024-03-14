@@ -3,10 +3,6 @@ _To manage a library using APIs._
 
 Use the APIs to search from and modify the library using authentication.
 
-## How to use the library management system:
-_Comming soon..._
-
-
 ## Build your own library management system: 
 1. Create your database from the library following the 'Library.sql' Database Schema.
 
