@@ -4,15 +4,60 @@ Prerequisites:
 An API testing application to make requests. Eg.: Postman.
 
 *References:*
-1. Get Student (Basic Auth)
-Retrieve a student's information from the database using their student ID.
+1. Get Student (Requires Basic Auth)
+Retrieve a student's information from the library's database using their student ID.
+Request - GET 
 
-List of students currently in the database:
-
-Request -GET 
 Endpoint: 
 Parameters: 
 Example:
 
 Response
 
+2. Get a Book 
+Get any book's details from the library's database using a book ID, book name or author name.
+Request - GET 
+
+Endpoint: 
+Parameters: 
+Example:
+
+3. Add a Book
+Add a new book to the library's database.
+Request - POST
+
+Endpoint: 
+Parameters: 
+Example:
+
+4. Issue a Book (Requires Basic Auth)
+Issue a book from the library.
+Request - POST
+
+Endpoint: 
+Parameters: 
+Example:
+
+5. Re-issue a Book (Requires Basic Auth)
+Re-issue an already issued book from the library.
+Request - PATCH
+
+Endpoint: 
+Parameters: 
+Example:
+
+6. Return a Book (Requires Basic Auth)
+Return an issued book back to the library.
+Request - PATCH
+
+Endpoint: 
+Parameters: 
+Example:
+
+7. Delete a Book (Requires Basic Auth)
+Delete a book from the library. (Depreciated)
+Request - DELETE
+
+Endpoint: 
+Parameters: 
+Example:
